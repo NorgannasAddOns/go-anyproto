@@ -1,0 +1,59 @@
+syntax = "proto2";
+package anypb;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
+message Any {
+  enum Type {
+    NilType = 0;
+    StringType = 1;
+    UintType = 2;
+    Uint32Type = 3;
+    Uint64Type = 4;
+    IntType = 5;
+    Int32Type = 6;
+    Int64Type = 7;
+    Float32Type = 8;
+    Float64Type = 9;
+    BoolType = 10;
+    ByteType = 11;
+  }
+  required Type type = 1 [(gogoproto.jsontag) = "-"];
+  oneof value {
+    string string_value = 2 [(gogoproto.jsontag) = "-"];
+    uint32 uint32_value = 3 [(gogoproto.jsontag) = "-"];
+    uint64 uint64_value = 4 [(gogoproto.jsontag) = "-"];
+    int32 int32_value = 5 [(gogoproto.jsontag) = "-"];
+    int64 int64_value = 6 [(gogoproto.jsontag) = "-"];
+    float float32_value = 7 [(gogoproto.jsontag) = "-"];
+    double float64_value = 8 [(gogoproto.jsontag) = "-"];
+    bool bool_value = 9 [(gogoproto.jsontag) = "-"];
+    bytes byte_value = 10 [(gogoproto.jsontag) = "-"];
+  }
+}
+message AnyMap {
+  enum Type {
+    NilType = 0;
+    AnyValueType = 1;
+    AnyArrayType = 2;
+    AnyStringMapType = 3;
+    AnyUintMapType = 4;
+    AnyUint32MapType = 5;
+    AnyUint64MapType = 6;
+    AnyIntMapType = 7;
+    AnyInt32MapType = 8;
+    AnyInt64MapType = 9;
+    AnyFloat32MapType = 10;
+    AnyFloat64MapType = 11;
+    AnyBoolMapType = 12;
+  }
+  required Type any_type = 1 [(gogoproto.jsontag) = "-"];
+  optional Any any_value = 2 [(gogoproto.jsontag) = "-"];
+  repeated AnyMap any_array = 3 [(gogoproto.jsontag) = "-"];
+  map<string, AnyMap> any_string_map = 4 [(gogoproto.jsontag) = "-"];
+  map<uint32, AnyMap> any_uint32_map = 5 [(gogoproto.jsontag) = "-"];
+  map<uint64, AnyMap> any_uint64_map = 6 [(gogoproto.jsontag) = "-"];
+  map<int32, AnyMap> any_int32_map = 7 [(gogoproto.jsontag) = "-"];
+  map<int64, AnyMap> any_int64_map = 8 [(gogoproto.jsontag) = "-"];
+  map<bool, AnyMap> any_bool_map = 9 [(gogoproto.jsontag) = "-"];
+}
