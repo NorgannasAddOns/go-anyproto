@@ -131,6 +131,7 @@ func setAnyValue(value interface{}, m *Any) (err error) {
 }
 
 func setMapData(kind reflect.Kind, data reflect.Value, anyMap reflect.Value, anyType AnyMap_Type, m *AnyMap, val reflect.Value, keys []reflect.Value, keyFn func(key reflect.Value) reflect.Value) (err error) {
+	mapData := data.Elem()
 	for _, key := range keys {
 		if key.Kind() == reflect.Ptr {
 			key = key.Elem()
@@ -147,10 +148,10 @@ func setMapData(kind reflect.Kind, data reflect.Value, anyMap reflect.Value, any
 		if keyFn != nil {
 			key = keyFn(key)
 		}
-		data.SetMapIndex(key, reflect.ValueOf(any))
+		mapData.SetMapIndex(key, reflect.ValueOf(any))
 	}
 	m.AnyType = &anyType
-	anyMap.Elem().Set(data)
+	anyMap.Elem().Set(mapData)
 	return
 }
 func setAnyMapValue(value interface{}, m *AnyMap) (err error) {
