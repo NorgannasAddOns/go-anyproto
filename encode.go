@@ -248,6 +248,9 @@ func setAnyMapValue(value interface{}, m *AnyMap) (err error) {
 				tag := f.Tag.Get("anypb")
 				if tag != "" {
 					tp := strings.SplitN(tag, ",", 2)
+					if tp[0] == "-" {
+						continue
+					}
 					if len(tp) > 1 && strings.Contains(tp[1], "omitempty") && any.IsEmpty() {
 						continue
 					}
