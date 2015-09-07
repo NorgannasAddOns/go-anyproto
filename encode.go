@@ -243,19 +243,21 @@ func setAnyMapValue(value interface{}, m *AnyMap) (err error) {
 			for i := 0; i < l; i++ {
 				f := t.Field(i)
 				v := val.FieldByName(f.Name)
-				any := &AnyMap{}
-				setAnyMapValue(v, any)
 				tag := f.Tag.Get("anypb")
 				if tag != "" {
 					tp := strings.SplitN(tag, ",", 2)
 					if tp[0] == "-" {
 						continue
 					}
+					any := &AnyMap{}
+					setAnyMapValue(v, any)
 					if len(tp) > 1 && strings.Contains(tp[1], "omitempty") && any.IsEmpty() {
 						continue
 					}
 					data[tp[0]] = any
 				} else {
+					any := &AnyMap{}
+					setAnyMapValue(v, any)
 					if any.IsEmpty() {
 						continue
 					}
