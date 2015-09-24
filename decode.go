@@ -304,10 +304,10 @@ func (d *decodeState) next(v reflect.Value, sv reflect.Value) {
 		for _, k := range keys {
 			mv := pv.MapIndex(k)
 			if !mv.IsValid() {
-				mv = reflect.New(pt.Elem())
-				pv.SetMapIndex(k, mv)
+				mv = reflect.New(pt.Elem()).Elem()
 			}
 			d.next(mv, nv.MapIndex(k))
+			pv.SetMapIndex(k, mv)
 		}
 	default:
 		pv.Set(nv)
