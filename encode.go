@@ -6,6 +6,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gogo/protobuf/proto"
 )
@@ -67,6 +68,16 @@ func setAnyValue(value interface{}, m *Any) (err error) {
 		switch kind {
 		case reflect.Interface:
 			err = setAnyValue(val.Interface(), m)
+		case reflect.Struct:
+			if val.Type().String() == "time.Time" {
+				t := val.Interface()
+				if v, ok := t.(time.Time); ok {
+					tStr := v.Format(time.RFC3339Nano)
+					err = setData(reflect.ValueOf(&m.StringValue), Any_TimeType, m, reflect.ValueOf(&tStr))
+					break
+				}
+			}
+			err = errors.New("Error: Unsupported value type")
 		case reflect.String:
 			if kind != reflect.Ptr {
 				val = reflect.ValueOf(proto.String(val.String()))
@@ -237,8 +248,15 @@ func setAnyMapValue(value interface{}, m *AnyMap) (err error) {
 			if val.Kind() == reflect.Ptr {
 				val = val.Elem()
 			}
-			data := make(map[string]*AnyMap)
 			t := val.Type()
+			if t.String() == "time.Time" {
+				anyType := AnyMap_AnyValueType
+				m.AnyType = &anyType
+				m.AnyValue = &Any{}
+				err = setAnyValue(val, m.AnyValue)
+				break
+			}
+			data := make(map[string]*AnyMap)
 			l := t.NumField()
 			for i := 0; i < l; i++ {
 				f := t.Field(i)

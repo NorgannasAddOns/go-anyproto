@@ -38,6 +38,7 @@ const (
 	Any_Float64Type Any_Type = 9
 	Any_BoolType    Any_Type = 10
 	Any_ByteType    Any_Type = 11
+	Any_TimeType    Any_Type = 30
 )
 
 var Any_Type_name = map[int32]string{
@@ -53,6 +54,7 @@ var Any_Type_name = map[int32]string{
 	9:  "Float64Type",
 	10: "BoolType",
 	11: "ByteType",
+	30: "TimeType",
 }
 var Any_Type_value = map[string]int32{
 	"NilType":     0,
@@ -67,6 +69,7 @@ var Any_Type_value = map[string]int32{
 	"Float64Type": 9,
 	"BoolType":    10,
 	"ByteType":    11,
+	"TimeType":    30,
 }
 
 func (x Any_Type) Enum() *Any_Type {

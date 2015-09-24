@@ -17,6 +17,7 @@ message Any {
     Float64Type = 9;
     BoolType = 10;
     ByteType = 11;
+    TimeType = 30;
   }
   required Type type = 1 [(gogoproto.jsontag) = "-"];
   oneof value {

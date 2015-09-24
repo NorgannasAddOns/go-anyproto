@@ -6,6 +6,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func getAnyValue(m *Any) interface{} {
@@ -32,6 +33,9 @@ func getAnyValue(m *Any) interface{} {
 		return m.GetBoolValue()
 	case Any_ByteType:
 		return m.GetByteValue()
+	case Any_TimeType:
+		t, _ := time.Parse(time.RFC3339, m.GetStringValue())
+		return t
 	}
 	return nil
 }
