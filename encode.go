@@ -234,15 +234,13 @@ func setAnyMapValue(value interface{}, m *AnyMap) (err error) {
 				err = setAnyValue(val, m.AnyValue)
 				break
 			}
-			if val.Len() > 0 {
-				anyType := AnyMap_AnyArrayType
-				m.AnyType = &anyType
-				m.AnyArray = make([]*AnyMap, val.Len())
-				for i := 0; i < val.Len(); i++ {
-					any := &AnyMap{}
-					setAnyMapValue(val.Index(i), any)
-					m.AnyArray[i] = any
-				}
+			anyType := AnyMap_AnyArrayType
+			m.AnyType = &anyType
+			m.AnyArray = make([]*AnyMap, val.Len())
+			for i := 0; i < val.Len(); i++ {
+				any := &AnyMap{}
+				setAnyMapValue(val.Index(i), any)
+				m.AnyArray[i] = any
 			}
 		case reflect.Struct:
 			if val.Kind() == reflect.Ptr {
@@ -289,50 +287,45 @@ func setAnyMapValue(value interface{}, m *AnyMap) (err error) {
 			if val.Kind() == reflect.Ptr {
 				val = val.Elem()
 			}
+			kind := val.Type().Key().Kind()
 			keys := val.MapKeys()
-			if len(keys) > 0 {
-				kind := keys[0].Kind()
-				if kind == reflect.Ptr {
-					kind = keys[0].Elem().Kind()
-				}
-				switch kind {
-				case reflect.String:
-					data := make(map[string]*AnyMap)
-					err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyStringMap), AnyMap_AnyStringMapType, m, val, keys, nil)
-				case reflect.Uint:
-					data := make(map[uint64]*AnyMap)
-					err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyUint64Map), AnyMap_AnyUintMapType, m, val, keys, nil)
-				case reflect.Uint32:
-					data := make(map[uint32]*AnyMap)
-					err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyUint32Map), AnyMap_AnyUint32MapType, m, val, keys, nil)
-				case reflect.Uint64:
-					data := make(map[uint64]*AnyMap)
-					err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyUint64Map), AnyMap_AnyUint64MapType, m, val, keys, nil)
-				case reflect.Int:
-					data := make(map[int64]*AnyMap)
-					err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyInt64Map), AnyMap_AnyIntMapType, m, val, keys, nil)
-				case reflect.Int32:
-					data := make(map[int32]*AnyMap)
-					err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyInt32Map), AnyMap_AnyInt32MapType, m, val, keys, nil)
-				case reflect.Int64:
-					data := make(map[int64]*AnyMap)
-					err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyInt64Map), AnyMap_AnyInt64MapType, m, val, keys, nil)
-				case reflect.Float32:
-					data := make(map[string]*AnyMap)
-					err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyStringMap), AnyMap_AnyFloat32MapType, m, val, keys, func(key reflect.Value) reflect.Value {
-						return reflect.ValueOf(strconv.FormatFloat(key.Float(), 'f', -1, 32))
-					})
-				case reflect.Float64:
-					data := make(map[string]*AnyMap)
-					err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyStringMap), AnyMap_AnyFloat64MapType, m, val, keys, func(key reflect.Value) reflect.Value {
-						return reflect.ValueOf(strconv.FormatFloat(key.Float(), 'f', -1, 64))
-					})
-				case reflect.Bool:
-					data := make(map[bool]*AnyMap)
-					err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyBoolMap), AnyMap_AnyBoolMapType, m, val, keys, nil)
-				default:
-					err = errors.New("Error: Unsupported map key type")
-				}
+			switch kind {
+			case reflect.String:
+				data := make(map[string]*AnyMap)
+				err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyStringMap), AnyMap_AnyStringMapType, m, val, keys, nil)
+			case reflect.Uint:
+				data := make(map[uint64]*AnyMap)
+				err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyUint64Map), AnyMap_AnyUintMapType, m, val, keys, nil)
+			case reflect.Uint32:
+				data := make(map[uint32]*AnyMap)
+				err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyUint32Map), AnyMap_AnyUint32MapType, m, val, keys, nil)
+			case reflect.Uint64:
+				data := make(map[uint64]*AnyMap)
+				err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyUint64Map), AnyMap_AnyUint64MapType, m, val, keys, nil)
+			case reflect.Int:
+				data := make(map[int64]*AnyMap)
+				err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyInt64Map), AnyMap_AnyIntMapType, m, val, keys, nil)
+			case reflect.Int32:
+				data := make(map[int32]*AnyMap)
+				err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyInt32Map), AnyMap_AnyInt32MapType, m, val, keys, nil)
+			case reflect.Int64:
+				data := make(map[int64]*AnyMap)
+				err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyInt64Map), AnyMap_AnyInt64MapType, m, val, keys, nil)
+			case reflect.Float32:
+				data := make(map[string]*AnyMap)
+				err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyStringMap), AnyMap_AnyFloat32MapType, m, val, keys, func(key reflect.Value) reflect.Value {
+					return reflect.ValueOf(strconv.FormatFloat(key.Float(), 'f', -1, 32))
+				})
+			case reflect.Float64:
+				data := make(map[string]*AnyMap)
+				err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyStringMap), AnyMap_AnyFloat64MapType, m, val, keys, func(key reflect.Value) reflect.Value {
+					return reflect.ValueOf(strconv.FormatFloat(key.Float(), 'f', -1, 64))
+				})
+			case reflect.Bool:
+				data := make(map[bool]*AnyMap)
+				err = setMapData(kind, reflect.ValueOf(&data), reflect.ValueOf(&m.AnyBoolMap), AnyMap_AnyBoolMapType, m, val, keys, nil)
+			default:
+				err = errors.New("Error: Unsupported map key type")
 			}
 		default:
 			anyType := AnyMap_AnyValueType

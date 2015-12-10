@@ -46,109 +46,110 @@ func getAnyMapValue(m *AnyMap) interface{} {
 		return getAnyValue(m.GetAnyValue())
 	case AnyMap_AnyArrayType:
 		data := m.GetAnyArray()
+		res := make([]interface{}, 0)
 		if data != nil {
-			res := make([]interface{}, len(data))
+			res = make([]interface{}, len(data))
 			for k, v := range data {
 				res[k] = getAnyMapValue(v)
 			}
-			return res
 		}
+		return res
 	case AnyMap_AnyStringMapType:
 		data := m.GetAnyStringMap()
+		res := make(map[string]interface{})
 		if data != nil {
-			res := make(map[string]interface{})
 			for k, v := range data {
 				res[k] = getAnyMapValue(v)
 			}
-			return res
 		}
+		return res
 	case AnyMap_AnyUintMapType:
 		data := m.GetAnyUint64Map()
+		res := make(map[uint]interface{})
 		if data != nil {
-			res := make(map[uint]interface{})
 			for k, v := range data {
 				res[uint(k)] = getAnyMapValue(v)
 			}
-			return res
 		}
+		return res
 	case AnyMap_AnyUint32MapType:
 		data := m.GetAnyUint32Map()
+		res := make(map[uint32]interface{})
 		if data != nil {
-			res := make(map[uint32]interface{})
 			for k, v := range data {
 				res[k] = getAnyMapValue(v)
 			}
-			return res
 		}
+		return res
 	case AnyMap_AnyUint64MapType:
 		data := m.GetAnyUint64Map()
+		res := make(map[uint64]interface{})
 		if data != nil {
-			res := make(map[uint64]interface{})
 			for k, v := range data {
 				res[k] = getAnyMapValue(v)
 			}
-			return res
 		}
+		return res
 	case AnyMap_AnyIntMapType:
 		data := m.GetAnyInt64Map()
+		res := make(map[int]interface{})
 		if data != nil {
-			res := make(map[int]interface{})
 			for k, v := range data {
 				res[int(k)] = getAnyMapValue(v)
 			}
-			return res
 		}
+		return res
 	case AnyMap_AnyInt32MapType:
 		data := m.GetAnyInt32Map()
+		res := make(map[int32]interface{})
 		if data != nil {
-			res := make(map[int32]interface{})
 			for k, v := range data {
 				res[k] = getAnyMapValue(v)
 			}
-			return res
 		}
+		return res
 	case AnyMap_AnyInt64MapType:
 		data := m.GetAnyInt64Map()
+		res := make(map[int64]interface{})
 		if data != nil {
-			res := make(map[int64]interface{})
 			for k, v := range data {
 				res[k] = getAnyMapValue(v)
 			}
-			return res
 		}
+		return res
 	case AnyMap_AnyFloat32MapType:
 		data := m.GetAnyStringMap()
+		res := make(map[float32]interface{})
 		if data != nil {
-			res := make(map[float32]interface{})
 			for k, v := range data {
 				float, err := strconv.ParseFloat(k, 32)
 				if err != nil {
 					res[float32(float)] = getAnyMapValue(v)
 				}
 			}
-			return res
 		}
+		return res
 	case AnyMap_AnyFloat64MapType:
 		data := m.GetAnyStringMap()
+		res := make(map[float64]interface{})
 		if data != nil {
-			res := make(map[float64]interface{})
 			for k, v := range data {
 				float, err := strconv.ParseFloat(k, 64)
 				if err != nil {
 					res[float] = getAnyMapValue(v)
 				}
 			}
-			return res
 		}
+		return res
 	case AnyMap_AnyBoolMapType:
 		data := m.GetAnyBoolMap()
+		res := make(map[bool]interface{})
 		if data != nil {
-			res := make(map[bool]interface{})
 			for k, v := range data {
 				res[k] = getAnyMapValue(v)
 			}
-			return res
 		}
+		return res
 	}
 	return nil
 }
